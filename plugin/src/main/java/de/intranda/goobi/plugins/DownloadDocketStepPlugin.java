@@ -116,15 +116,19 @@ public class DownloadDocketStepPlugin implements IStepPluginVersion2 {
     @Override
     public PluginReturnValue run() {
         boolean successful = true;
-        // your logic goes here
-        
-
-        BatchBean bean = (BatchBean) Helper.getBeanByName("BatchForm", BatchBean.class);
-        ArrayList<Batch> list = new ArrayList<Batch>();
-        Integer i = step.getProzess().getBatch().getBatchId();
-        list.add(ProcessManager.getBatchById(i));
-        bean.setSelectedBatches(list);
-        bean.downloadDocket();
+        // if process belongs to a batch then create a batch docket
+        if (step.getProzess().getBatch() != null) {
+            BatchBean bean = (BatchBean) Helper.getBeanByName("BatchForm", BatchBean.class);
+            ArrayList<Batch> list = new ArrayList<Batch>();
+            
+            Integer i = step.getProzess().getBatch().getBatchId();
+            list.add(ProcessManager.getBatchById(i));
+            bean.setSelectedBatches(list);
+            bean.downloadDocket();
+        } else {
+            // if not a batch process then create a single docket
+            step.getProzess().downloadDocket();
+        }
         
         log.info("DownloadDocket step plugin executed");
         if (!successful) {
