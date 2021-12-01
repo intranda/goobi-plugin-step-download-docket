@@ -1,5 +1,7 @@
 package de.intranda.goobi.plugins;
 
+import java.util.ArrayList;
+
 /**
  * This file is part of a plugin for Goobi - a Workflow tool for the support of mass digitization.
  *
@@ -21,8 +23,13 @@ package de.intranda.goobi.plugins;
 
 import java.util.HashMap;
 
+import javax.enterprise.context.ContextNotActiveException;
+
 import org.apache.commons.configuration.SubnodeConfiguration;
+import org.goobi.beans.Batch;
 import org.goobi.beans.Step;
+import org.goobi.managedbeans.BatchBean;
+import org.goobi.managedbeans.LoginBean;
 import org.goobi.production.enums.PluginGuiType;
 import org.goobi.production.enums.PluginReturnValue;
 import org.goobi.production.enums.PluginType;
@@ -30,6 +37,8 @@ import org.goobi.production.enums.StepReturnValue;
 import org.goobi.production.plugin.interfaces.IStepPluginVersion2;
 
 import de.sub.goobi.config.ConfigPlugins;
+import de.sub.goobi.helper.Helper;
+import de.sub.goobi.persistence.managers.ProcessManager;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -62,10 +71,10 @@ public class DownloadDocketStepPlugin implements IStepPluginVersion2 {
 
     @Override
     public PluginGuiType getPluginGuiType() {
-        return PluginGuiType.FULL;
+//        return PluginGuiType.FULL;
         // return PluginGuiType.PART;
         // return PluginGuiType.PART_AND_FULL;
-        // return PluginGuiType.NONE;
+         return PluginGuiType.NONE;
     }
 
     @Override
@@ -108,6 +117,14 @@ public class DownloadDocketStepPlugin implements IStepPluginVersion2 {
     public PluginReturnValue run() {
         boolean successful = true;
         // your logic goes here
+        
+
+        BatchBean bean = (BatchBean) Helper.getBeanByName("BatchForm", BatchBean.class);
+        ArrayList<Batch> list = new ArrayList<Batch>();
+        Integer i = step.getProzess().getBatch().getBatchId();
+        list.add(ProcessManager.getBatchById(i));
+        bean.setSelectedBatches(list);
+        bean.downloadDocket();
         
         log.info("DownloadDocket step plugin executed");
         if (!successful) {
