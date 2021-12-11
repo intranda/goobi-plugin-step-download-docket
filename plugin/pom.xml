@@ -6,6 +6,7 @@
   <packaging>pom</packaging>
   <properties>
     <goobi.version>21.11.3</goobi.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
   <distributionManagement>
     <repository>
