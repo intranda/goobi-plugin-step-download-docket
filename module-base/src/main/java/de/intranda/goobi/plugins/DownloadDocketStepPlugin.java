@@ -23,7 +23,7 @@ import java.util.ArrayList;
 
 import java.util.HashMap;
 
-import javax.enterprise.context.ContextNotActiveException;
+import jakarta.enterprise.context.ContextNotActiveException;
 
 import org.apache.commons.configuration.SubnodeConfiguration;
 import org.goobi.beans.Batch;
